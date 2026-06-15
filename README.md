@@ -1,240 +1,172 @@
-# AI dental clinic receptionist
+# AI Dental Receptionist
 
-An AI receptionist for dental clinics. Patients chat via a web widget,
-WhatsApp, or LINE; the AI answers questions from the clinic's knowledge
-base, checks real appointment availability against Google Calendar, books
-appointment requests, and escalates emergencies to staff. Includes
-automated follow-up reminders.
+A React-based AI receptionist widget for dental clinics with Supabase backend, WhatsApp/LINE/web channel support, Google Calendar integration, and automated follow-ups.
 
-## Stack
-
-- **Frontend**: React + Vite, deployed to Vercel
-- **Backend**: Supabase (Postgres, Auth, Edge Functions, pg_cron)
-- **AI**: Anthropic API (Claude), called from Edge Functions with tool use
-- **Channels**: Web widget, WhatsApp (Meta Cloud API), LINE (Messaging API)
-- **Calendar**: Google Calendar (OAuth2, freebusy + event sync)
-
-## Folder structure
+## 📋 Project Structure
 
 ```
 .
-├── index.html
-├── package.json
-├── vite.config.js
-├── vercel.json
-├── .env.example
-├── .eslintrc.cjs
-├── .gitignore
-├── src/
+├── src/                           # Frontend source
 │   ├── main.jsx                  # React entry point
-│   ├── App.jsx                   # Top-level app
-│   ├── index.css                 # Global styles + CSS variables (light/dark)
+│   ├── App.jsx                   # Root component
+│   ├── index.css                 # Global styles
 │   ├── components/
-│   │   └── ClinicReceptionist.jsx  # Chat widget UI
+│   │   └── ClinicReceptionist.jsx  # Main chat widget
 │   └── lib/
-│       ├── supabaseClient.js     # Supabase client init
-│       └── clinicData.js         # Frontend data helpers
-└── supabase/
-    ├── migrations/
-    │   ├── 001_init.sql                  # Core schema: clinics, patients,
-    │   │                                  # conversations, appointments
-    │   ├── 002_google_calendar.sql       # Google Calendar token storage
-    │   ├── 003_scheduling_config.sql     # Slot duration / booking horizon
-    │   ├── 004_channel_configs.sql       # WhatsApp / LINE credentials
-    │   └── 005_followups.sql             # Follow-up automation + pg_cron
-    └── functions/
-        ├── _shared/
-        │   ├── googleCalendar.ts   # Calendar API helpers (auth, freebusy, events)
-        │   ├── whatsapp.ts         # WhatsApp Cloud API helpers
-        │   ├── line.ts             # LINE Messaging API helpers
-        │   ├── notify.ts           # Proactive message routing
-        │   └── conversations.ts    # Shared conversation lookup/create
-        ├── conversation-engine/    # Core AI engine (Claude + tool use)
-        ├── check-availability/     # Computes open appointment slots
-        ├── calendar-sync/          # Syncs appointment <-> Google Calendar event
-        ├── google-oauth-callback/  # Google OAuth connect flow
-        ├── whatsapp-webhook/       # WhatsApp inbound message handler
-        ├── line-webhook/           # LINE inbound message handler
-        ├── process-followups/      # Scheduled reminders (pg_cron target)
-        ├── GOOGLE_CALENDAR_SETUP.md
-        ├── CONVERSATION_ENGINE_SETUP.md
-        ├── WHATSAPP_SETUP.md
-        ├── LINE_SETUP.md
-        └── FOLLOWUPS_SETUP.md
+│       ├── clinicData.js         # Supabase queries
+│       └── supabaseClient.js     # Supabase init
+│
+├── supabase/
+│   ├── migrations/               # Database schemas
+│   │   ├── 001_initial_schema.sql
+│   │   ├── 002_google_calendar.sql
+│   │   └── 004_channel_configs.sql
+│   └── functions/                # Edge Functions
+│
+├── index.html                    # HTML entry
+├── package.json                  # Dependencies
+├── vite.config.js                # Vite config
+├── vercel.json                   # Vercel config
+├── tsconfig.json                 # TypeScript config
+├── .env.example                  # Env template
+├── .gitignore                    # Git ignore
+└── README.md                     # Documentation
 ```
 
----
+## 🚀 Quick Start
 
-## 1. Prerequisites
-
+### Prerequisites
 - Node.js 18+
-- A [Supabase](https://supabase.com) project
-- An [Anthropic API key](https://console.anthropic.com)
-- The [Supabase CLI](https://supabase.com/docs/guides/cli) (`npm install -g supabase`)
-- (Optional, for full functionality) A Meta developer account for WhatsApp,
-  a LINE developer account, and a Google Cloud project for Calendar
+- npm or yarn
 
----
-
-## 2. Local installation
+### Local Development
 
 ```bash
-git clone <your-repo-url>
-cd <repo-name>
+# 1. Install dependencies
 npm install
-cp .env.example .env
-```
 
-Edit `.env`:
+# 2. Copy environment template
+cp .env.example .env.local
 
-```
-VITE_SUPABASE_URL=https://<your-project-ref>.supabase.co
-VITE_SUPABASE_ANON_KEY=<your-anon-key>
-```
+# 3. Add your Supabase credentials to .env.local
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your_anon_key
 
-(Both values are in Supabase dashboard → Project Settings → API.)
-
-Run the dev server:
-
-```bash
+# 4. Run dev server
 npm run dev
+
+# 5. Open http://localhost:5173
 ```
 
-The app runs at `http://localhost:5173`. At this point the chat widget will
-load but won't respond until the backend is set up (next section).
-
----
-
-## 3. Supabase backend setup
-
-### 3.1 Link the project and run migrations
+### Build for Production
 
 ```bash
-supabase login
-supabase link --project-ref <your-project-ref>
-supabase db push
+npm run build
+npm run preview
 ```
 
-This applies all five migrations in `supabase/migrations/`, creating:
-`clinic_settings`, `patients`, `conversations`, `appointments`,
-`clinic_google_tokens`, `channel_configs`, `follow_ups`, plus seed data for
-the default clinic (slug `bright-smile`).
+## 🌐 Vercel Deployment
 
-If you're not using the CLI, you can instead run each file in order via the
-Supabase SQL editor.
+This project is configured for Vercel with the proper structure:
 
-### 3.2 Set Edge Function secrets
+1. **Push to GitHub** (already done)
+2. **Connect to Vercel**:
+   - Go to https://vercel.com/new
+   - Import your GitHub repo
+   - Vercel auto-detects Vite configuration
+3. **Add Environment Variables** in Vercel Dashboard:
+   ```
+   VITE_SUPABASE_URL
+   VITE_SUPABASE_ANON_KEY
+   GOOGLE_CLIENT_ID (optional)
+   GOOGLE_CLIENT_SECRET (optional)
+   WHATSAPP_APP_SECRET (optional)
+   WHATSAPP_VERIFY_TOKEN (optional)
+   ```
+4. **Deploy** - Vercel automatically builds and deploys on push
 
-```bash
-supabase secrets set ANTHROPIC_API_KEY=sk-ant-xxxx
+## 📦 Key Dependencies
+
+- **React** 18.3 - UI framework
+- **Vite** 5.4 - Build tool (faster than CRA)
+- **Supabase JS** 2.45 - Backend client
+- **ESLint** - Code quality
+
+## 🔧 Available Scripts
+
+| Command | Purpose |
+|---------|----------|
+| `npm run dev` | Start dev server on port 5173 |
+| `npm run build` | Build for production (creates `dist/`) |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint checks |
+
+## 🛠️ Backend Setup (Supabase)
+
+### 1. Create Supabase Project
+- Go to https://supabase.com
+- Create a new project
+- Copy the project URL and anon key
+
+### 2. Apply Migrations
+In Supabase SQL Editor, run:
+- `supabase/migrations/001_initial_schema.sql`
+- `supabase/migrations/002_google_calendar.sql`
+- `supabase/migrations/004_channel_configs.sql`
+
+### 3. Configure Environment
+Add to `.env.local`:
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-`SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are provided automatically to
-Edge Functions — no need to set them manually.
+## ✨ Features
 
-### 3.3 Deploy Edge Functions
+- ✅ AI-powered chat widget
+- ✅ Multi-channel (Web, WhatsApp, LINE)
+- ✅ Google Calendar integration
+- ✅ Conversation persistence
+- ✅ Human escalation
+- ✅ Responsive design
+- ✅ Dark mode support
 
-```bash
-supabase functions deploy conversation-engine
-supabase functions deploy check-availability
-supabase functions deploy calendar-sync
-```
+## 📚 Architecture
 
-These three are required for the web widget to work end-to-end.
+### Frontend (React + Vite)
+- Runs on Vercel
+- Builds to `dist/` directory
+- Communicates with Supabase
 
-### 3.4 Optional integrations
+### Backend (Supabase)
+- PostgreSQL database
+- Authentication & RLS
+- Edge Functions (optional)
+- Real-time subscriptions
 
-Each of the following is independent — set up only what you need. Full
-instructions are in the linked files:
+### External Integrations
+- **Google Calendar** - Availability & booking
+- **WhatsApp** - Channel webhook
+- **LINE** - Channel webhook
 
-| Feature | Guide |
-|---|---|
-| Google Calendar sync & availability | `supabase/functions/GOOGLE_CALENDAR_SETUP.md` |
-| WhatsApp channel | `supabase/functions/WHATSAPP_SETUP.md` |
-| LINE channel | `supabase/functions/LINE_SETUP.md` |
-| Automated reminders | `supabase/functions/FOLLOWUPS_SETUP.md` |
+## 🐛 Troubleshooting
 
-Tool-use behaviors in `conversation-engine` (availability checking,
-booking, escalation) degrade gracefully if Google Calendar isn't connected
-— bookings are still saved to the database, just not synced to a calendar.
+### Build fails with "missing files"
+- Ensure all files in `src/` and `supabase/` exist
+- Run `npm install` to install dependencies
 
----
+### Vercel deployment fails
+- Check that `package.json` exists in root
+- Check that `vite.config.js` exists
+- Verify environment variables are set in Vercel Dashboard
+- Check build logs in Vercel dashboard
 
-## 4. Customizing the clinic
+### Blank page after deployment
+- Verify `index.html` is in the root
+- Verify `src/main.jsx` exists
+- Check browser console for errors
+- Check that Supabase environment variables are correct
 
-All clinic info — hours, services, pricing, policies, staff, contact info —
-lives in the `clinic_settings` table (`hours` and `knowledge_base` JSONB
-columns), seeded by `001_init.sql`. Update it via the SQL editor:
+## 📄 License
 
-```sql
-update clinic_settings
-set knowledge_base = jsonb_set(knowledge_base, '{services}', '"Updated services text..."')
-where slug = 'bright-smile';
-```
-
-A dedicated admin dashboard for editing this (and managing leads,
-appointments, and conversations) is a planned next step — not yet included
-in this bundle.
-
----
-
-## 5. Deploying the frontend (GitHub + Vercel)
-
-### 5.1 Push to GitHub
-
-```bash
-git init
-git add .
-git commit -m "Initial commit: AI dental receptionist"
-git branch -M main
-git remote add origin https://github.com/<your-username>/<your-repo>.git
-git push -u origin main
-```
-
-### 5.2 Import into Vercel
-
-1. Go to [vercel.com/new](https://vercel.com/new) and import the GitHub repo.
-2. Vercel auto-detects Vite via `vercel.json` (framework: `vite`, build
-   command `npm run build`, output directory `dist`).
-3. Add environment variables under Project Settings → Environment Variables:
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
-4. Deploy.
-
-Every push to `main` redeploys automatically. Preview deployments are
-created for pull requests.
-
-### 5.3 Post-deploy checklist
-
-- Open the deployed URL — the chat widget should load and greet the patient
-- Send a message asking about hours/services — should answer from the KB
-- Ask "what's available this week for a cleaning?" — should call
-  `check_availability` and return real slots
-- If WhatsApp/LINE are configured, message the clinic's number/bot and
-  confirm the reply comes back through the same `conversation-engine`
-
----
-
-## Architecture notes
-
-- **Multi-channel, single brain**: web widget, WhatsApp, and LINE all call
-  the same `conversation-engine` Edge Function, so AI behavior, tool use,
-  and conversation history are consistent across channels.
-- **Tool use**: Claude calls `check_availability`, `collect_patient_info`,
-  `book_appointment`, and `escalate_to_human` as structured tools rather
-  than free-form text, which is what makes bookings and availability checks
-  reliable.
-- **Security**: WhatsApp/LINE/Google tokens live in tables with no RLS
-  policies — only the Edge Functions' service-role key can access them.
-  The frontend only has the anon key and can read `clinic_settings` and
-  manage its own `conversations`/`patients`/`appointments` rows.
-- **Follow-ups**: `pg_cron` triggers `process-followups` every 15 minutes to
-  send reminders and re-engagement nudges via the patient's original
-  channel.
-
-## What's not included yet
-
-- Admin dashboard (inbox, leads pipeline, KB editor, calendar connect UI)
-- Lead scoring
-- Multi-tenant clinic switching in the frontend (currently single-clinic via
-  `CLINIC_SLUG` in `src/lib/supabaseClient.js`)
+Made for Sakura Tech - Sakura Clinic PLUS pack

@@ -1,65 +1,51 @@
 # AI Dental Receptionist
 
-A React-based AI receptionist widget for dental clinics with Supabase backend, WhatsApp/LINE/web channel support, Google Calendar integration, and automated follow-ups.
+🚀 **Professional React + Vite + Supabase Application**
 
-## 📋 Project Structure
+## 📁 Project Structure (CLEAN)
 
 ```
-.
-├── src/                           # Frontend source
-│   ├── main.jsx                  # React entry point
-│   ├── App.jsx                   # Root component
-│   ├── index.css                 # Global styles
+Dental-Clinic-Ai/
+├── src/                              ✨ Frontend Source
+│   ├── main.jsx                      • React app entry
+│   ├── App.jsx                       • Root component
+│   ├── index.css                     • Global styles
 │   ├── components/
-│   │   └── ClinicReceptionist.jsx  # Main chat widget
+│   │   └── ClinicReceptionist.jsx    • Main chat widget
 │   └── lib/
-│       ├── clinicData.js         # Supabase queries
-│       └── supabaseClient.js     # Supabase init
+│       ├── clinicData.js             • Supabase queries
+│       └── supabaseClient.js         • Supabase config
 │
-├── supabase/
-│   ├── migrations/               # Database schemas
+├── supabase/                         📊 Backend
+│   ├── migrations/                   • Database schemas
 │   │   ├── 001_initial_schema.sql
 │   │   ├── 002_google_calendar.sql
 │   │   └── 004_channel_configs.sql
-│   └── functions/                # Edge Functions
+│   └── functions/                    • Edge Functions (optional)
 │
-├── index.html                    # HTML entry
-├── package.json                  # Dependencies
-├── vite.config.js                # Vite config
-├── vercel.json                   # Vercel config
-├── tsconfig.json                 # TypeScript config
-├── .env.example                  # Env template
-├── .gitignore                    # Git ignore
-└── README.md                     # Documentation
+├── 📄 Root Config Files
+│   ├── index.html                    • HTML entry point
+│   ├── package.json                  • Dependencies
+│   ├── vite.config.js                • Build config
+│   ├── vercel.json                   • Vercel deployment
+│   ├── tsconfig.json                 • TypeScript config
+│   ├── .gitignore                    • Git rules
+│   ├── .env.example                  • Environment template
+│   └── README.md                     • This file
 ```
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Node.js 18+
-- npm or yarn
-
-### Local Development
-
+### 1. Local Development
 ```bash
-# 1. Install dependencies
 npm install
-
-# 2. Copy environment template
 cp .env.example .env.local
-
-# 3. Add your Supabase credentials to .env.local
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your_anon_key
-
-# 4. Run dev server
+# Edit .env.local with your Supabase credentials
 npm run dev
-
-# 5. Open http://localhost:5173
+# Visit http://localhost:5173
 ```
 
-### Build for Production
-
+### 2. Build
 ```bash
 npm run build
 npm run preview
@@ -67,106 +53,108 @@ npm run preview
 
 ## 🌐 Vercel Deployment
 
-This project is configured for Vercel with the proper structure:
-
-1. **Push to GitHub** (already done)
-2. **Connect to Vercel**:
-   - Go to https://vercel.com/new
-   - Import your GitHub repo
-   - Vercel auto-detects Vite configuration
-3. **Add Environment Variables** in Vercel Dashboard:
+### Setup
+1. Push this repo to GitHub ✅
+2. Go to https://vercel.com/new
+3. Import your repo
+4. Add environment variables:
    ```
    VITE_SUPABASE_URL
    VITE_SUPABASE_ANON_KEY
-   GOOGLE_CLIENT_ID (optional)
-   GOOGLE_CLIENT_SECRET (optional)
-   WHATSAPP_APP_SECRET (optional)
-   WHATSAPP_VERIFY_TOKEN (optional)
    ```
-4. **Deploy** - Vercel automatically builds and deploys on push
+5. Deploy!
 
-## 📦 Key Dependencies
+### Build Settings (Auto-detected)
+- **Framework**: Vite
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Install Command**: `npm install`
 
-- **React** 18.3 - UI framework
-- **Vite** 5.4 - Build tool (faster than CRA)
-- **Supabase JS** 2.45 - Backend client
-- **ESLint** - Code quality
+## 🔑 Environment Variables
 
-## 🔧 Available Scripts
-
-| Command | Purpose |
-|---------|----------|
-| `npm run dev` | Start dev server on port 5173 |
-| `npm run build` | Build for production (creates `dist/`) |
-| `npm run preview` | Preview production build locally |
-| `npm run lint` | Run ESLint checks |
-
-## 🛠️ Backend Setup (Supabase)
-
-### 1. Create Supabase Project
-- Go to https://supabase.com
-- Create a new project
-- Copy the project URL and anon key
-
-### 2. Apply Migrations
-In Supabase SQL Editor, run:
-- `supabase/migrations/001_initial_schema.sql`
-- `supabase/migrations/002_google_calendar.sql`
-- `supabase/migrations/004_channel_configs.sql`
-
-### 3. Configure Environment
-Add to `.env.local`:
+Create `.env.local`:
 ```env
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your_anon_key_here
+GOOGLE_CLIENT_ID=optional
+GOOGLE_CLIENT_SECRET=optional
+```
+
+## 📦 Dependencies
+
+| Package | Version | Purpose |
+|---------|---------|----------|
+| React | 18.3.1 | UI Framework |
+| Vite | 5.4.0 | Build tool (⚡ fast) |
+| Supabase JS | 2.45.0 | Backend client |
+| ESLint | 8.57.0 | Code quality |
+
+## 🎯 Available Commands
+
+```bash
+npm run dev      # Start dev server (hot reload)
+npm run build    # Build for production
+npm run preview  # Preview production build
+npm run lint     # Check code quality
 ```
 
 ## ✨ Features
 
-- ✅ AI-powered chat widget
+- ✅ AI-powered receptionist chat
 - ✅ Multi-channel (Web, WhatsApp, LINE)
 - ✅ Google Calendar integration
-- ✅ Conversation persistence
-- ✅ Human escalation
+- ✅ Supabase backend
+- ✅ Real-time conversations
 - ✅ Responsive design
 - ✅ Dark mode support
 
-## 📚 Architecture
+## 🔗 Supabase Setup
 
-### Frontend (React + Vite)
-- Runs on Vercel
-- Builds to `dist/` directory
-- Communicates with Supabase
+### Create Project
+1. Go to https://supabase.com
+2. New project
+3. Copy URL + Anon Key
 
-### Backend (Supabase)
-- PostgreSQL database
-- Authentication & RLS
-- Edge Functions (optional)
-- Real-time subscriptions
-
-### External Integrations
-- **Google Calendar** - Availability & booking
-- **WhatsApp** - Channel webhook
-- **LINE** - Channel webhook
+### Apply Migrations
+In Supabase SQL Editor, run files from `supabase/migrations/` in order:
+1. `001_initial_schema.sql` - Create tables
+2. `002_google_calendar.sql` - Calendar config
+3. `004_channel_configs.sql` - Channel settings
 
 ## 🐛 Troubleshooting
 
-### Build fails with "missing files"
-- Ensure all files in `src/` and `supabase/` exist
-- Run `npm install` to install dependencies
+| Issue | Fix |
+|-------|-----|
+| "Cannot find src/" | Files must be in `src/` folder |
+| Blank page after build | Check index.html exists + VITE_ env vars |
+| Vercel build fails | Check `npm run build` works locally first |
+| "Module not found" | Run `npm install` |
 
-### Vercel deployment fails
-- Check that `package.json` exists in root
-- Check that `vite.config.js` exists
-- Verify environment variables are set in Vercel Dashboard
-- Check build logs in Vercel dashboard
+## 📚 File Reference
 
-### Blank page after deployment
-- Verify `index.html` is in the root
-- Verify `src/main.jsx` exists
-- Check browser console for errors
-- Check that Supabase environment variables are correct
+### Frontend Entry
+- `src/main.jsx` → Renders App into `<div id="root">`
+- `src/App.jsx` → Main component, renders ClinicReceptionist
+- `index.html` → HTML wrapper with script tag pointing to src/main.jsx
 
-## 📄 License
+### Chat Widget
+- `src/components/ClinicReceptionist.jsx` → Main UI component
+- `src/lib/clinicData.js` → Supabase queries
+- `src/lib/supabaseClient.js` → Client initialization
 
-Made for Sakura Tech - Sakura Clinic PLUS pack
+### Database
+- `supabase/migrations/001_initial_schema.sql` → Clinics, conversations tables
+- `supabase/migrations/002_google_calendar.sql` → Calendar token storage
+- `supabase/migrations/004_channel_configs.sql` → WhatsApp/LINE config
+
+## 💡 Next Steps
+
+1. ✅ Set up Supabase project
+2. ✅ Apply database migrations
+3. ✅ Add environment variables
+4. ✅ Run locally: `npm run dev`
+5. ✅ Deploy to Vercel
+
+---
+
+**Made for Sakura Tech** - Sakura Clinic PLUS pack ($1490/month)

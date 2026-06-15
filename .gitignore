@@ -30,3 +30,30 @@ dist-ssr
 
 # Supabase
 .supabase
+
+# Old/backup files
+download
+*.zip
+ai-dental-receptionist.zip
+env.example
+eslintrc.cjs
+002_google_calendar.sql
+004_channel_configs.sql
+App.jsx
+ClinicReceptionist.jsx
+GOOGLE_CALENDAR_SETUP.md
+LINE_SETUP.md
+WHATSAPP_SETUP.md
+clinicData.js
+conversations.ts
+googleCalendar.ts
+index.css (old)
+index.ts
+index (1).ts
+index (2).ts
+index (4).ts
+index (6).ts
+main.jsx (old)
+notify.ts
+supabaseClient.js (old)
+whatsapp.ts
